@@ -23,7 +23,7 @@ class RandomWords extends StatefulWidget {
 
 class _RandomWordsState extends State<RandomWords> {
   final _suggestions = <WordPair>[];
-  final _saved = Set<WordPair>();     // NEW
+  final _saved = Set<WordPair>(); // NEW
 
   final _biggerFont = TextStyle(fontSize: 18.0);
 
@@ -47,8 +47,7 @@ class _RandomWordsState extends State<RandomWords> {
   }
 
   Widget _buildRow(WordPair pair) {
-    final alreadySaved = _saved.contains(pair);  // NEW
-
+    final alreadySaved = _saved.contains(pair); // NEW
 
     return ListTile(
       title: Text(
@@ -59,62 +58,92 @@ class _RandomWordsState extends State<RandomWords> {
         alreadySaved ? Icons.favorite : Icons.favorite_border,
         color: alreadySaved ? Colors.red : null,
       ),
-      onTap: (){
+      onTap: () {
         setState(() {
-          if(alreadySaved){
+          if (alreadySaved) {
             _saved.remove(pair);
-          }else{
+          } else {
             _saved.add(pair);
           }
         });
       },
-
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    //Main
     return Scaffold(
       appBar: AppBar(
         title: Text('Startup Name Generator'),
-        actions: [
+        actions: <Widget>[
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         ],
       ),
       body: _buildSuggestions(),
+      drawer: Drawer(
+        child: ListView(
+          children: <Widget>[
+            ListTile(
+              leading: Icon(
+                Icons.home,
+                color: Colors.grey[850],
+              ),
+              title: Text('홈'),
+              onTap:(){
+                print('home pressed');
+              },
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.image,
+                color: Colors.grey[850],
+              ),
+              title: Text('사진보기'),
+              onTap: (){},
+              trailing: Icon(Icons.arrow_forward_ios),
+            ),
+            ListTile(
+              leading:Icon(
+                Icons.border_color,
+                color: Colors.grey[850],
+              ),
+              title: Text('글쓰기'),
+              onTap: (){},
+              trailing: Icon(Icons.arrow_forward_ios),
+            )
+          ],
+        ),
+
+
+      ),
     );
   }
 
   void _pushSaved() {
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(builder:
-      (BuildContext context){
-        final tiles = _saved.map(
-            (WordPair pair){
-              return ListTile(
-                title: Text(
-                  pair.asPascalCase,
-                  style: _biggerFont,
-                ),
-              );
-            },
-        );
-        final divided = ListTile.divideTiles(
-          context: context,
-          tiles: tiles,
-        ).toList();
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (BuildContext context) {
+      final tiles = _saved.map(
+        (WordPair pair) {
+          return ListTile(
+            title: Text(
+              pair.asPascalCase,
+              style: _biggerFont,
+            ),
+          );
+        },
+      );
+      final divided = ListTile.divideTiles(
+        context: context,
+        tiles: tiles,
+      ).toList();
 
-        return Scaffold(
-          appBar: AppBar(
-            title: Text('saved suggestions'),
-          ),
-          body: ListView(children: divided),
-        );
-
-
-
-      })
-
-    );
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('saved suggestions'),
+        ),
+        body: ListView(children: divided),
+      );
+    }));
   }
 }
