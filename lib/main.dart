@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'package:flutter_app/page/page1.dart';
+import 'package:flutter_app/page/page2.dart';
+import 'package:flutter_app/page/ImageListPage.dart';
+import 'package:flutter_app/page/pageViewpage.dart';
 
 void main() => runApp(MyApp());
 
@@ -11,7 +15,18 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.blue,
       ),
-      home: RandomWords(),
+      debugShowCheckedModeBanner: false,
+//      home: RandomWords(),
+
+      initialRoute: '/',
+      routes: {
+        //라우트설정
+        '/': (context) => RandomWords(),
+        '/page1': (context) => Page1(),
+        '/page2': (context) => Page2(),
+        '/image3': (context) => ImageListPage(),
+        '/image4': (context) => pageViewpage(),
+      },
     );
   }
 }
@@ -83,14 +98,39 @@ class _RandomWordsState extends State<RandomWords> {
       body: _buildSuggestions(),
       drawer: Drawer(
         child: ListView(
+          padding: EdgeInsets.zero,
           children: <Widget>[
+            UserAccountsDrawerHeader(
+              //현사용자
+              currentAccountPicture: CircleAvatar(
+                backgroundImage: AssetImage('images/original3.png'),
+                backgroundColor: Colors.white,
+              ),
+              otherAccountsPictures: [
+                //비사용자
+                CircleAvatar(
+                  backgroundImage: AssetImage('images/original11.png'),
+                  backgroundColor: Colors.white,
+                )
+              ],
+              accountName: Text('hyuntae'),
+              accountEmail: Text('hyuntae@gmail.com'),
+              onDetailsPressed: () {
+                print('arrow is clicked');
+              },
+              decoration: BoxDecoration(
+                  color: Colors.red[200],
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(40.0),
+                      bottomRight: Radius.circular(40.0))),
+            ),
             ListTile(
               leading: Icon(
                 Icons.home,
                 color: Colors.grey[850],
               ),
               title: Text('홈'),
-              onTap:(){
+              onTap: () {
                 print('home pressed');
               },
             ),
@@ -100,22 +140,46 @@ class _RandomWordsState extends State<RandomWords> {
                 color: Colors.grey[850],
               ),
               title: Text('사진보기'),
-              onTap: (){},
+              onTap: () {
+                Navigator.pushNamed(context, '/page1');
+              },
               trailing: Icon(Icons.arrow_forward_ios),
             ),
             ListTile(
-              leading:Icon(
+              leading: Icon(
                 Icons.border_color,
                 color: Colors.grey[850],
               ),
               title: Text('글쓰기'),
-              onTap: (){},
+              onTap: () {
+                Navigator.pushNamed(context, '/page2');
+              },
+              trailing: Icon(Icons.arrow_forward_ios),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.add_photo_alternate,
+                color: Colors.grey[850],
+              ),
+              title: Text('이미지 리스트'),
+              onTap: () {
+                Navigator.pushNamed(context, '/image3');
+              },
+              trailing: Icon(Icons.arrow_forward_ios),
+            ),
+            ListTile(
+              leading: Icon(
+                Icons.image,
+                color: Colors.grey[850],
+              ),
+              title: Text('이미지 뷰어'),
+              onTap: () {
+                Navigator.pushNamed(context, '/image4');
+              },
               trailing: Icon(Icons.arrow_forward_ios),
             )
           ],
         ),
-
-
       ),
     );
   }
@@ -145,5 +209,27 @@ class _RandomWordsState extends State<RandomWords> {
         body: ListView(children: divided),
       );
     }));
+  }
+}
+
+class PageView1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Page 1'),
+      ),
+    );
+  }
+}
+
+class PageView2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Page 2'),
+      ),
+    );
   }
 }
